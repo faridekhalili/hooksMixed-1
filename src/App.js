@@ -1,21 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import TaskList from './TaskList';
 
 export const TaskContext = React.createContext();
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
-  const [newTaskText, setNewTaskText] = useState('');
+  const newTaskTextRef = useRef('');
 
   const handleAddTask = () => {
+    const newTaskText = newTaskTextRef.current.value;
     if (newTaskText.trim() !== '') {
       setTasks([...tasks, { text: newTaskText, completed: false }]);
-      setNewTaskText('');
+      newTaskTextRef.current.value = '';
     }
-  };
-
-  const handleNewTaskTextChange = (event) => {
-    setNewTaskText(event.target.value);
   };
 
   return (
@@ -25,8 +22,7 @@ const App = () => {
         <div>
           <input
             type="text"
-            value={newTaskText}
-            onChange={handleNewTaskTextChange}
+            ref={newTaskTextRef}
             id="taskText"
           />
           <button onClick={handleAddTask}>Agregar tarea</button>
